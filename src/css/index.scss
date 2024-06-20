@@ -1,0 +1,10 @@
+.box3{
+    width:100px;
+    height:100px;
+    background: green;
+    /*嵌套后生成#main p .redbox*/
+    .redbox {
+        background-color:red;
+        color:#000;
+    }
+}
