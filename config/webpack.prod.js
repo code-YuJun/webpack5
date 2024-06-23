@@ -6,6 +6,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // CSS 压缩
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
+// 图片无损压缩
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 // 合并配置 获取处理样式的Loaders
 const getStyleLoaders = (preProcessor) => {
     return [
@@ -97,7 +99,35 @@ module.exports = {
         }),
         // css压缩
         new CssMinimizerPlugin(),
+        // 压缩图片
+        new ImageMinimizerPlugin({
+            minimizer: {
+                implementation: ImageMinimizerPlugin.imageminGenerate,
+                options: {
+                    plugins: [
+                        ["gifsicle", { interlaced: true }],
+                        ["jpegtran", { progressive: true }],
+                        ["optipng", { optimizationLevel: 5 }],
+                        [
+                            "svgo",
+                            {
+                                plugins: [
+                                    "preset-default",
+                                    "prefixIds",
+                                    {
+                                        name: "sortAttrs",
+                                        params: {
+                                            xmlnsOrder: "alphabetical",
+                                        },
+                                    },
+                                ],
+                            },
+                        ],
+                    ],
+                },
+            },
+        }),
     ],
-    devtool:"source-map",
+    devtool: "source-map",
     mode: "production"
 }
